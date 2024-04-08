@@ -1,7 +1,43 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { Link } from 'react-router-dom'
+import { registerAPI } from '../../Services/allAPIs'
 
 const Auth = ({ register }) => {
+  const [userData, setUserData] = useState({
+    username:"",
+    email:"",
+    password:"",
+  })
+    const handleRegister = async(e)=>{
+      e.preventDefault()
+      if(!userData.username || !userData.email || !userData.password){
+        Swal.fire({
+          title:"Warning",
+          text: "Please fill your form properly",
+          icon: 'warning',
+          confirmButtonText: 'Back'
+        })
+      }
+      else{
+        const result = await registerAPI(userData)
+        console.log(result);
+        if(result.status==200){
+          Swal.fire({
+            title:"Warning",
+          text: "Successfully registered",
+          icon: 'warning',
+          confirmButtonText: 'Back'
+          })
+        }
+      }
+      elseif(result.response.status==406)
+      
+      
+    }
+
+    console.log(userData);
+
+
   return (
     <div>
       <div className='row'>
@@ -19,10 +55,10 @@ const Auth = ({ register }) => {
             <div className='mx-5 px-5 mt-3'>
               {
                 register &&
-                <input className='form-control mb-2' type="text" name="username" placeholder="Username" />
+                <input onChange={e=>setUserData({...userData,username:e.target.value})} value={userData.username} className='form-control mb-2' type="text" name="username" placeholder="Username" />
               }
-              <input className='form-control mb-2' type="text" name="email" placeholder="Email Address" />
-              <input className='form-control mb-2' type="text" name="password" placeholder="Password" />
+              <input  onChange={e=>setUserData({...userData,email:e.target.value})} value={userData.email}  className='form-control mb-2' type="text" name="email" placeholder="Email Address" />
+              <input  onChange={e=>setUserData({...userData,password:e.target.value})} value={userData.password} className='form-control mb-2' type="text" name="password" placeholder="Password" />
             </div>
 
 
@@ -35,7 +71,7 @@ const Auth = ({ register }) => {
                   </div>
                   :
                   <div>
-                    <button className='btn btn-primary w-80 mt-4'>Login</button>
+                    <button onClick={handleRegister} className='btn btn-primary w-80 mt-4'>Login</button>
                     <p> New a member? <Link to={'/register'}> Sign up now...</Link></p>
                   </div>
 
