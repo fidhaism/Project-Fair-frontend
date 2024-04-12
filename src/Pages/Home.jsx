@@ -1,8 +1,19 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
 import ProjectCard from '../Components/ProjectCard'
+import Programmer from '../Components/ProjectCard'
 
 const Home = () => {
+  const [isLoggedIn, setLoggedIn] = useState(false)
+
+  useEffect(()=>{
+    if(sessionStorage.getItem("token")){
+      setLoggedIn(true)
+    }
+    else{
+      setLoggedIn(false)
+    }
+  })
   return (
     <div>
       <div className='row'>
@@ -17,6 +28,19 @@ const Home = () => {
             But the benefits extend beyond aesthetics. Our platform prioritizes security, ensuring your valuable projects are safely stored within your private account.
             Whether you're a developer, designer, freelancer, or simply someone passionate about showcasing your creative endeavors, this platform provides the perfect foundation to build a compelling online presence and share your unique story with the world.
           </p>
+          {
+            isLoggedIn? 
+            <div className='text-center'>
+              <Link to={'/dashboard}'}>
+                <button className='btn btn-dark mt-2 mb-5'> Manage your Projects</button>
+              </Link>
+            </div> :
+            <div className='text-center'>
+              <Link to={'/Login'}>
+                <button className='btn btn-dark mt-2 mb-5'>Get Started</button>
+              </Link>
+            </div>
+          }
           <div className='text-center'>
             <Link to={'/login'}>
               <button className='btn btn-dark mt-2 mb-5'>Get Started</button>

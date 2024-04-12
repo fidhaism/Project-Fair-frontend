@@ -1,9 +1,20 @@
-import React from 'react'
-import AddProject from '../Components/AddProject';  
+import React, { useEffect, useState } from 'react'
+ 
 import MyProject from '../Components/MyProject';
 import Profile from '../Components/Profile'
 
 const Dashboard = () => {
+  const [username, setUsername] = useState("")
+  useEffect(()=>{
+    if(sessionStorage.getItem("username")){
+      setUsername(sessionStorage.getItem("username"))   //
+    }
+    else{
+      setUsername("") // if user is not logged in then set username to empty string 
+
+    }
+  })
+
   return (
     <div>
       <div className="row">

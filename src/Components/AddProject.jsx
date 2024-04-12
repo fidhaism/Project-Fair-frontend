@@ -4,10 +4,30 @@ import Modal from 'react-bootstrap/Modal';
 import { useState } from 'react';
 
 const AddProject = () => {
+  
+  const [preview, setPreview] = useState()
+  const [filestatus, setFileStatus] = useState(false)
+  const [projectData, setProjectData] = useState({})
+  console.log
   const [show, setShow] = useState(false);
 
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
+
+  useEffect(()=>{
+    console.log(projectData.projectImage.type);
+    if(projectData.projectImage.type='image/png' || projectData.projectImage.type=="image/jpeg" || projectData.projectImage.type=="image/jpg"){
+      console.log("Generate image url")
+      // File to URL Conversion
+      console.log(URL.createObjectURL(projectData.projectImage))
+      setPreview(URL.createObjectURL(projectData.projectImage))
+      setFileStatus(false)
+  }
+  else{
+    setFileStatus(true)
+    console.log("Please insert an image with extensions(png, jpeg, jpg) only...");
+  }
+    },[projectData.projectImage])
 
   return (
     <div>
@@ -26,9 +46,12 @@ const AddProject = () => {
           <div className='row'>
             <div className='col-6 mt- p-5'>
               <label >
-                <input type="file" style={{display:'none'}} />
-                <img width={'300px'}src="https://source.unsplash.com/random/100*100" alt="image not found" />
+                <input  onChange={e=>setProjectData({projectData,projectImage:e.target.files[0]})} type="file" style={{display:'none'}} />
+                <img width={'300px'}  src={preview?preview:"https://source.unsplash.com/random/100*100"} alt="image not found" />
               </label>
+              {
+                filestatus && <p className='text-danger m-2'> **Please insert an image with extensions(png,jpeg,jpg) only..</p>
+              }
             </div>
             <div className='col-6 text-center'>
               <input className='form-control mb-3' type="text" placeholder='Project Title' />
