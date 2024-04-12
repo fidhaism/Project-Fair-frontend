@@ -5,9 +5,10 @@ import Profile from '../Components/Profile'
 
 const Dashboard = () => {
   const [username, setUsername] = useState("")
+  
   useEffect(()=>{
     if(sessionStorage.getItem("username")){
-      setUsername(sessionStorage.getItem("username"))   //
+      setUsername(sessionStorage.getItem("username")) 
     }
     else{
       setUsername("") // if user is not logged in then set username to empty string 

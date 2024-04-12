@@ -1,22 +1,31 @@
 import React from 'react'
 import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
-import { useState } from 'react';
+import { useState,useEffect } from 'react';
 
 const AddProject = () => {
   
-  const [preview, setPreview] = useState()
+  const [preview, setPreview] = useState("")
   const [filestatus, setFileStatus] = useState(false)
-  const [projectData, setProjectData] = useState({})
-  console.log
+  const [projectData, setProjectData] = useState({
+    title:"",
+    language:"",
+    github:"",
+    livelink:"",
+    overview:"",
+    projectImage:""
+  })
+  console.log(projectData);
+  
   const [show, setShow] = useState(false);
 
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
 
+  // 
   useEffect(()=>{
     console.log(projectData.projectImage.type);
-    if(projectData.projectImage.type='image/png' || projectData.projectImage.type=="image/jpeg" || projectData.projectImage.type=="image/jpg"){
+    if(projectData.projectImage.type=='image/png' || projectData.projectImage.type=="image/jpeg" || projectData.projectImage.type=="image/jpg"){
       console.log("Generate image url")
       // File to URL Conversion
       console.log(URL.createObjectURL(projectData.projectImage))
@@ -46,7 +55,7 @@ const AddProject = () => {
           <div className='row'>
             <div className='col-6 mt- p-5'>
               <label >
-                <input  onChange={e=>setProjectData({projectData,projectImage:e.target.files[0]})} type="file" style={{display:'none'}} />
+                <input onChange={e=>setProjectData({...projectData,projectImage:e.target.files[0]})}  type="file" style={{display:'none'}} />
                 <img width={'300px'}  src={preview?preview:"https://source.unsplash.com/random/100*100"} alt="image not found" />
               </label>
               {
@@ -54,11 +63,11 @@ const AddProject = () => {
               }
             </div>
             <div className='col-6 text-center'>
-              <input className='form-control mb-3' type="text" placeholder='Project Title' />
-              <input className='form-control mb-3' type="text" placeholder='Language Used' />
-              <input  className='form-control mb-3' type="text" placeholder='Github Link' />
-              <input  className='form-control mb-3' type="text" placeholder='Live Link' />
-              <input className='form-control mb-3' type="text" placeholder='Overview'/>
+              <input onChange={e=>setProjectData({...projectData,title:e.target.value})}   className='form-control mb-3' type="text" placeholder='Project Title' />
+              <input onChange={e=>setProjectData({...projectData,language:e.target.value})} className='form-control mb-3' type="text" placeholder='Language Used' />
+              <input onChange={e=>setProjectData({...projectData,github:e.target.value})} className='form-control mb-3' type="text" placeholder='Github Link' />
+              <input onChange={e=>setProjectData({...projectData,livelink:e.target.value})} className='form-control mb-3' type="text" placeholder='Live Link' />
+              <input onChange={e=>setProjectData({...projectData,overview:e.target.value})} className='form-control mb-3' type="text" placeholder='Overview'/>
             </div>
           </div>
         </Modal.Body>

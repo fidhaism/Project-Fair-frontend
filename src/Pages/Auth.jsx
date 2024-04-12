@@ -73,9 +73,12 @@ const Auth = ({ register }) => {
       const result = await loginAPI(userData)
       console.log(result)
       if (result.status === 200) {
+        sessionStorage.setItem('username', result.data.existingUser.username)
+        sessionStorage.setItem('token', result.data.token)
+
         Swal.fire({
           title: 'Success!',
-          text: 'User Details updated',
+          text: 'You are now Logged In',
           icon: 'successfully Logged In',
           confirmButtonText: 'Back'
         })
@@ -84,7 +87,7 @@ const Auth = ({ register }) => {
           email: '',
           password: ''
         })
-        // To navigate to login page
+        //  navigate to home page
         navigate('/')
       } else if (result.response.status == 406) {
         Swal.fire({
@@ -106,8 +109,8 @@ const Auth = ({ register }) => {
         </div>
         <div className="col-lg-6 ">
           <form className='shadow bg-black '>
-            <h3 className='text-center mt-5'>Project Fair</h3>
-            <h5 className='text-center text-white'> Use your credentials.
+            <h3 className='text-center mt-5'style={{color:'limegreen'}}>Project Fair</h3>
+            <h5 className='text-center text-white'> Use your credentials to <br />
               {
                 register ? 'Register here...' : 'Login here...'  //conditional rendering with ternary operator used 
               }
