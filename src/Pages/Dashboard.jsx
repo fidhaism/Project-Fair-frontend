@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react'
  
 import MyProject from '../Components/MyProject';
 import Profile from '../Components/Profile'
+import { Link } from 'react-router-dom'
 
 const Dashboard = () => {
   const [username, setUsername] = useState("")
@@ -28,6 +29,11 @@ const Dashboard = () => {
         </div>
       </div>
 
+    <div className='text-center m-5'>
+      <Link to={'./projects'}>
+      <button className='btn btn-dark'>View all Users Project</button>
+      </Link>
+    </div>
     </div>
   )
 }

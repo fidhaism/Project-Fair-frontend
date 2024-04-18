@@ -71,3 +71,8 @@ This is the frontend repository for Project Fair.
         -> Browser router - It is used to set up app routing - main.jsx
         -> Routes - to hold more than one route - App.jsx
         -> Route - to set up Components path - App.jsx
+
+5. Sweetalert installation:
+    -> npm install sweetalert2
+
+ 

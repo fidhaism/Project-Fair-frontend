@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
 import ProjectCard from '../Components/ProjectCard'
-import Programmer from '../Components/ProjectCard'
+
 
 const Home = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(false)
@@ -46,7 +46,7 @@ const Home = () => {
         </div>
         
         <div className='col-md-6'>
-          <img src="https://uploads.gts.az/about/620c9374943f97.45501398.webp" alt="" style={{ width: '610px', height: '500px' }} />
+          <img src="https://nicsguide.com/wp-content/uploads/2023/07/JasperArt_2023-07-01_13.28.17_4_upscaled.jpg" alt="" style={{ width: '610px', height: '500px' }} />
         </div>
       </div>
       <div>

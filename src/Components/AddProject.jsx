@@ -2,6 +2,7 @@ import React from 'react'
 import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
 import { useState,useEffect } from 'react';
+import { addProjectAPI } from '../../Services/allAPIs';
 
 const AddProject = () => {
   
@@ -18,25 +19,73 @@ const AddProject = () => {
   console.log(projectData);
   
   const [show, setShow] = useState(false);
-
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
+  
 
-  // 
   useEffect(()=>{
-    console.log(projectData.projectImage.type);
+    //console.log(projectData.projectImage.type);
     if(projectData.projectImage.type=='image/png' || projectData.projectImage.type=="image/jpeg" || projectData.projectImage.type=="image/jpg"){
-      console.log("Generate image url")
+      console.log("Generate image url:")
       // File to URL Conversion
-      console.log(URL.createObjectURL(projectData.projectImage))
-      setPreview(URL.createObjectURL(projectData.projectImage))
+      console.log(URL.createObjectURL(projectData.projectImage));
+      setPreview(URL.createObjectURL(projectData.projectImage));
       setFileStatus(false)
   }
   else{
     setFileStatus(true)
     console.log("Please insert an image with extensions(png, jpeg, jpg) only...");
   }
-    },[projectData.projectImage])
+    },[projectData.projectImage]);
+  
+
+    //add project button
+    const handleAddProject = async () => {
+      const [token,setToken] = setToken();
+      //data passing through state
+      const { title, language, github, livelink, overview, projectImage } = projectData
+  
+      if (!title || !language || !github || !livelink || !overview || !projectImage) {
+        alert("Please fill the following fields")
+      }
+      else {
+        
+        const reqBody = new FormData()
+        reqBody.append("title", title)
+        reqBody.append("language", language)
+        reqBody.append("github", github)
+        reqBody.append("livelink", livelink)
+        reqBody.append("overview", overview)
+        reqBody.append("projectImage", projectImage)
+        
+        
+        if (token) {
+          const reqHeader = {
+            "Content-Type": "multipart/form-data",
+            "Authorization": `Bearer ${token}`
+          }
+          //api call
+          const result = await addProjectAPI(reqBody, reqHeader)
+          console.log(result);
+          if (result.status == 200) {
+            alert("Project added successfully");
+            handleClose()
+            setProjectData({title:'',
+            language:'',
+            github:'',
+            livelink:'',
+            overview:'',
+            projectImage:'',
+            userId:'',
+          })
+          }
+          else {
+            alert(result.response.data)
+          }
+        }
+      }
+  
+    }
 
   return (
     <div>
