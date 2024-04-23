@@ -1,87 +1,113 @@
-import React, { useEffect, useState } from 'react'
-import { Link } from 'react-router-dom'
-import ProjectCard from '../Components/ProjectCard'
-
+import React, { useEffect, useState } from 'react';
+import { Link } from 'react-router-dom';
+import ProjectCard from '../Components/ProjectCard';
+import { getHomeProjectAPI } from '../../Services/allAPIs';
 
 const Home = () => {
-  const [isLoggedIn, setIsLoggedIn] = useState(false)
-
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [homeProject, setHomeProject] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState('');
 
   useEffect(() => {
-    if (sessionStorage.getItem("token")) {
-      setIsLoggedIn(true)
-    }
-    else {
-      setIsLoggedIn(false)
-    }
-  })
+    const fetchData = async () => {
+      try {
+        const result = await getHomeProjectAPI();
+        if (result.status === 200) {
+          setHomeProject(result.data);
+        } else {
+          setError('Failed to fetch projects');
+        }
+      } catch (error) {
+        setError('Failed to fetch projects');
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchData();
+
+    setIsLoggedIn(!!sessionStorage.getItem('token'));
+  }, []);
+
   return (
-    <div>
-      <div className='row'>
-        <h3 className='text-center mt-5'><b>Dev Arsenal</b>: Where Design Meets Data, Unveiling Full-Stack Projects</h3>
-        <div className='col-md-6 mt-5'>
-
-          <p style={{ textAlign: 'justify' }} className='mx-5'>Do you have a collection of projects you'd love to share with the world? This platform provides the perfect space to build your online portfolio and showcase your creative spark. Sign up for a free account and gain access to a suite of user-friendly tools that allow you to easily manage and present your best work.
-            <br />
-            Imagine a central hub for all your projects, meticulously organized and readily accessible. With our intuitive interface, you can upload various project files, add detailed descriptions, and even categorize them for a streamlined presentation. This level of control empowers you to craft a narrative around your work, highlighting your skills and experience in a way that resonates
-            with potential employers or clients.
-            <br />
-            But the benefits extend beyond aesthetics. Our platform prioritizes security, ensuring your valuable projects are safely stored within your private account.
-            Whether you're a developer, designer, freelancer, or simply someone passionate about showcasing your creative endeavors, this platform provides the perfect foundation to build a compelling online presence and share your unique story with the world.
+    <div className="container mt-5">
+      <div className="row">
+        <div className="col-md-6">
+          <h3 className="text-center mb-4">
+            <b>Dev Arsenal</b>: Where Design Meets Data, Unveiling Full-Stack Projects
+          </h3>
+          <p className="mx-3 text-justify mb-5">
+            Do you have a collection of projects you'd love to share with the world? This platform provides the perfect space to build your online portfolio and showcase your creative spark. Sign up for a free account and gain access to a suite of user-friendly tools that allow you to easily manage and present your best work.
           </p>
+          <div className="text-center">
+            {isLoggedIn ? (
+              <Link to="/dashboard">
+                <button className="btn btn-dark mt-2 mb-5">Manage your Projects</button>
+              </Link>
+            ) : (
+              <Link to="/login">
+                <button className="btn btn-dark mt-2 mb-5">Get Started</button>
+              </Link>
+            )}
+          </div>
+        </div>
+        <div className="col-md-6">
+          <img
+            src="https://via.placeholder.com/600x500" // Placeholder image link
+            alt="Dev Arsenal"
+            className="img-fluid"
+            style={{ width: '100%', maxHeight: '500px', objectFit: 'cover' }}
+          />
+        </div>
+      </div>
 
-          {
-            isLoggedIn ?
-              <div className='text-center'>
-                <Link to={'/dashboard}'}>
-                  <button className='btn btn-dark mt-2 mb-5'> Manage your Projects </button>
-                </Link>
-              </div> :
-              <div className='text-center'>
-                <Link to={'/login'}>
-                  <button className='btn btn-dark mt-2 mb-5'>Get Started</button>
-                </Link>
+      <div className="row mt-5">
+        <h3 className="text-center mb-4">Explore Our Projects</h3>
+        <div className="row">
+          {loading ? (
+            <p className="text-center">Loading...</p>
+          ) : error ? (
+            <p className="text-center">Error: {error}</p>
+          ) : (
+            homeProject.map(item => (
+              <div key={item.id} className="col-md-4 mb-4">
+                <ProjectCard project={item} />
               </div>
-          }
-        </div>
-        
-        <div className='col-md-6'>
-          <img src="https://nicsguide.com/wp-content/uploads/2023/07/JasperArt_2023-07-01_13.28.17_4_upscaled.jpg" alt="" style={{ width: '610px', height: '500px' }} />
+            ))
+          )}
         </div>
       </div>
-      <div>
-        <div className="col-12" style={{ height: '500px' }}>
-          <h3 className='text-center m-5'>Explore Our Projects</h3>
-          <marquee width="100%" height="400px" direction="left">
-            <div>
-              <ProjectCard />
-            </div>
-          </marquee>
-        </div>
-      </div>
-      <div className='row mx-5' >
-        <h3 className='text-center m-5'>Our Services</h3>
+
+      <div className="row mt-5">
+        <h3 className="text-center mb-4">Our Services</h3>
         <div className="col-md-4">
-          <div className='card shadow p-5' style={{ height: '370px' }}>
-            <h5 className='text-center m-2'>Web  Design & Development</h5>
-            <p style={{ textAlign: 'justify' }}>Looking to establish a captivating online presence? Our web services combine the best of both worlds: web design and development. Our design team acts as the artist and architect, crafting user-friendly interfaces and visually striking layouts that reflect your brand identity.This powerful duo creates websites that are both aesthetically pleasing and high-performing, leaving a lasting impression on your visitors.</p>
+          <div className="card shadow p-4 mb-4">
+            <h5 className="text-center">Web Design & Development</h5>
+            <p className="text-justify">
+              Looking to establish a captivating online presence? Our web services combine the best of both worlds: web design and development. Our design team crafts user-friendly interfaces and visually striking layouts that reflect your brand identity.
+            </p>
           </div>
         </div>
         <div className="col-md-4">
-          <div className='card shadow p-5' style={{ height: '370px' }}>
-            <h5 className='text-center m-2'>Single-Page Application</h5>
-            <p style={{ textAlign: 'justify' }}>Imagine a website that feels as fluid and engaging as your favorite app. With SPAs, that's exactly what you get. We'll build a single, dynamic web page that reacts to your users' clicks without the annoying lag of reloading. This translates to lightning-fast loading times, an intuitive flow that keeps them glued to their screens, and an overall experience that feels more like an app than a website. </p>
+          <div className="card shadow p-4 mb-4">
+            <h5 className="text-center">Single-Page Application</h5>
+            <p className="text-justify">
+              Imagine a website that feels as fluid and engaging as your favorite app. With SPAs, we'll build a single, dynamic web page that reacts to your users' clicks without the annoying lag of reloading.
+            </p>
           </div>
         </div>
         <div className="col-md-4">
-          <div className='card shadow p-5' style={{ height: '370px' }}>
-            <h5 className='text-center m-2' >Backend Development & Services</h5>
-            <p style={{ textAlign: 'justify' }}>Think of us as the website whisperers, handling all the data storage, user authentication, and complex calculations that happen out of sight. This frees your website to focus on what it does best – delivering an amazing user experience. With our expert backend services, you can rest assured your website will be reliable, secure, and always ready to handle whatever users throw its way.</p>
+          <div className="card shadow p-4 mb-4">
+            <h5 className="text-center">Backend Development & Services</h5>
+            <p className="text-justify">
+              Think of us as the website whisperers, handling all the data storage, user authentication, and complex calculations that happen out of sight. With our expert backend services, you can rest assured your website will be reliable, secure, and always ready to handle whatever users throw its way.
+            </p>
           </div>
         </div>
       </div>
     </div>
-  )
-}
+  );
+};
 
-export default Home
+export default Home;

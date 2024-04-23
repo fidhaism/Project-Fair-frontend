@@ -1,41 +1,39 @@
-import React, { useEffect, useState } from 'react'
- 
+import React, { useEffect, useState } from 'react';
 import MyProject from '../Components/MyProject';
-import Profile from '../Components/Profile'
-import { Link } from 'react-router-dom'
+import Profile from '../Components/Profile';
+import { Link } from 'react-router-dom';
+import { FaUser } from 'react-icons/fa';
+import { Container, Row, Col, Button } from 'react-bootstrap';
 
 const Dashboard = () => {
-  const [username, setUsername] = useState("")
-  
-  useEffect(()=>{
-    if(sessionStorage.getItem("username")){
-      setUsername(sessionStorage.getItem("username")) 
-    }
-    else{
-      setUsername("") // if user is not logged in then set username to empty string 
+  const [username, setUsername] = useState('');
 
-    }
-  })
+  useEffect(() => {
+    const storedUsername = sessionStorage.getItem('username');
+    setUsername(storedUsername || ''); // Set username to stored value or empty string if not found
+  }, []);
 
   return (
-    <div>
-      <div className="row">
-        <h4 className='text-center mt-3'>Welcome <span className='text-Light'>User</span></h4>
-        <div className="col-lg-6">
+    <Container className="mt-5">
+      <h4 className="text-center mb-4">Welcome, <span className="text-primary">{username}</span>!</h4>
+      <Row>
+        <Col lg={6}>
           <MyProject />
-        </div>
-        <div className='col-lg-6'>
+        </Col>
+        <Col lg={6}>
           <Profile />
-        </div>
+        </Col>
+      </Row>
+      <div className="text-center mt-5">
+        <Link to="/projects" className="text-decoration-none">
+          <Button variant="dark" className="px-4 py-2">
+            <FaUser className="me-2" />
+            View All Users' Projects
+          </Button>
+        </Link>
       </div>
+    </Container>
+  );
+};
 
-    <div className='text-center m-5'>
-      <Link to={'./projects'}>
-      <button className='btn btn-dark'>View all Users Project</button>
-      </Link>
-    </div>
-    </div>
-  )
-}
-
-export default Dashboard
+export default Dashboard;

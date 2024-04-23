@@ -1,23 +1,23 @@
-import axios from 'axios';
+// API calling
+import axios from "axios";
 
-//API Calling
+export const commonAPI = async (httpRequest, url, reqbody, reqHeader) => {
+  const reqConfig = {
+    method: httpRequest,
+    url,
+    data: reqbody,
+    headers: reqHeader
+      ? reqHeader
+      : {
+          "Content-Type": "application/json",
+        },
+  };
 
-export const commonAPI = async(httpRequest,url,reqBody,reqHeader)=>{
-    const reqConfig={
-        method:httpRequest,
-        url,
-        data:reqBody,
-        headers:reqHeader?reqHeader:{
-            'Content-Type': 'application/json',
-        }
-    }
-
-
-return await axios(reqConfig).then((response)=>{
-    return response  
-})
-.catch((error)=>{
-    
-    return error;
-});
-}
+  return await axios(reqConfig)
+    .then((response) => {
+      return response;
+    })
+    .catch((error) => {
+      return error;
+    });
+};
